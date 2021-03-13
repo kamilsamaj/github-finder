@@ -1,6 +1,7 @@
 // Load GitHub oauth clientid and clientsecret from locally stored file
 let creds;
 let github;
+const ui = new UI();
 
 (async function loadGitHubClient() {
     const response = await fetch('secrets.json');
@@ -15,8 +16,15 @@ document.getElementById('searchUser').addEventListener('keyup', ev => {
     if (userText !== '') {
         github.getUser(userText)
             .then(data => {
-                console.log(data);
+                if (data.profile.message === 'Not Found') {
+                    // show alert
+                } else {
+                    console.log(data);
+                    ui.showProfile(data.profile);
+                }
             });
+    } else {
+        // Clear profile
     }
 });
 
